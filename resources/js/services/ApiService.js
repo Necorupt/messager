@@ -57,6 +57,4 @@ const ApiService = {
     },
 };
 
-axios.defaults.withCredentials = true;
-
 export default ApiService;

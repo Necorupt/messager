@@ -18,7 +18,9 @@ class ChatMessageController extends Controller
             'user_id' => Auth::user()->id
         ]);
 
-        event(new CreateMessage($chatMessage,$request->chat_id));
+        $chatMessage['user'] = $chatMessage->user;
+
+        event(new CreateMessage($chatMessage,$request->chat_id, Auth::user()));
 
         return response()->json($chatMessage);
     }

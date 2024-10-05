@@ -9,9 +9,6 @@
         </li>
     </ul>
     <div v-else>
-        <p>Welcome!</p>
-        <button @click="logout">Logout</button>
-
         <div class="chat-list">
             <div v-for="item in chats" class="chat__item">
                 <h3>name: {{ item.name }}</h3>
@@ -24,7 +21,7 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
-import ApiService from '../services/ApiService'
+import ApiService from '../services/ApiService';
 
 export default {
     data() {

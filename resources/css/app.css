@@ -1,0 +1,22 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #242723;
+}
+
+#app{
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+h1,h2,h3,h4,h5,h6 {
+    color: aliceblue;
+    text-decoration: none;
+    margin: 0;
+}
+
+.text__link{
+    color: aliceblue;
+    text-decoration: none;
+}

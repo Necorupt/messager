@@ -82,6 +82,6 @@ class ChatController extends Controller
             return response()->json(['message' => 'Chat not found'], 404);
         };
 
-        return response()->json(ChatMessage::where('chat_id', $chat_id)->with('user')->get());
+        return response()->json(ChatMessage::where('chat_id', $chat_id)->with('user')->paginate(30));
     }
 }

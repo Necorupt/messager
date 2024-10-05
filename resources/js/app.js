@@ -1,12 +1,14 @@
+import '../css/app.css'
+
 import './bootstrap';
 import { createApp } from 'vue';
 import routes  from '@/routes';
-import Auth from '@/store/Auth.js';
+import store  from '@/store';
 
 import App from '@/App.vue';
 
 
 const app = createApp(App);
 app.use(routes);
-app.use(Auth);
+app.use(store);
 app.mount('#app');

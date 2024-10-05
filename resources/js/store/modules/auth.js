@@ -1,18 +1,15 @@
-import { createStore } from "vuex";
-import TokenService from "../services/TokenService";
-import ApiService from "../services/ApiService";
+import TokenService from "../../services/TokenService";
+import ApiService from "../../services/ApiService";
 
-const store = createStore({
+export default {
     state() {
         return {
             token: TokenService.getToken(),
             auth: null,
-
         };
     },
     mutations: {
         login(state) {
-
             state.isLoggedIn = true;
         },
         logout(state) {
@@ -21,10 +18,12 @@ const store = createStore({
         setToken(state, value) {
             state.token = value;
         },
+        setAuth(state, value) {
+            state.auth = value;
+        },
     },
     actions: {
         async login({ state, commit, dispatch }, form) {
-
             return new Promise((resolve, reject) => {
                 ApiService.get("/sanctum/csrf-cookie")
                     .then((response) => {
@@ -47,6 +46,11 @@ const store = createStore({
                     });
             });
         },
+        getAuth(context) {
+            ApiService.get("/user").then((response) => {
+                context.commit('setAuth', response.data);
+            })
+        },
         logout(context) {
             context.commit('logout');
         },
@@ -59,6 +63,5 @@ const store = createStore({
             return state.auth;
         }
     }
-});
+};
 
-export default store;

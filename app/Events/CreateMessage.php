@@ -21,15 +21,21 @@ class CreateMessage implements ShouldBroadcastNow
 
     private $message = null;
     private $chatId = null;
-    public function __construct($message, $chatId)
+    private $user = null;
+    public function __construct($message, $chatId, $user)
     {
         $this->message = $message;
         $this->chatId = $chatId;
+        $this->user = $user;
     }
 
     public function broadcastWith(): array
     {
-        return ['message' => $this->message];
+       $data =  [$this->message];
+
+       $data['message']['user'] = $this->user;
+       $data['message']['message'] = $this->message['message'];
+       return $data;
     }
 
     /**
