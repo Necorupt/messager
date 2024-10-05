@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\ChatMessageController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -17,4 +18,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::resource('/chat', ChatController::class);
     Route::post('/chat/{chat_id}/add-member', [ChatController::class,'addMember']);
     Route::get('/chat/{chat_id}/members', [ChatController::class,'members']);
+    Route::get('/chat/{chat_id}/messages', [ChatController::class,'getMessages']);
+});
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::resource('/message', ChatMessageController::class);
 });

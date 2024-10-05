@@ -1,6 +1,7 @@
 <template>
     <RouterLink :to="{ name: 'index' }">Main page</RouterLink>
     <h1>Chat {{ chat.name }}</h1>
+    <h4>id: {{ chat.id }}</h4>
     <h4>description {{ chat.description }}</h4>
     <div>
         <ul>
@@ -17,7 +18,8 @@
     </div>
     <div class="messages">
         <div v-for="item in messages" class="message">
-            {{item}}
+            <h4 class="message_author">User: {{item.user.name}}</h4>
+            <h4 class="message__text">say: {{item.message}}</h4>
         </div>
     </div>
 </template>
@@ -43,6 +45,7 @@ export default {
         ApiService.get('/chat/' + this.$route.params.id).then((response) => {
             this.chat = response.data;
             this.getMembers();
+            this.getMessages();
         })
     },
     methods: {
@@ -55,9 +58,20 @@ export default {
 
         },
         sendMessage(){
-            this.messages.push(this.newMessage);
-            this.newMessage = '';
-        }
+            let params = {
+                message: this.newMessage,
+                chat_id: this.$route.params.id,
+            }
+            ApiService.post('/message',params).then((response) => {
+                this.newMessage = '';
+                this.getMessages();
+            });
+        },
+        getMessages(){
+            ApiService.get('/chat/' + this.$route.params.id + '/messages').then((response) => {
+                this.messages = response.data;
+            });
+        },
     },
 }
 
@@ -70,6 +84,20 @@ export default {
     flex-direction: column;
     gap: 10px;
     border: 1px solid black;
+    padding-left: 10px;
 }
-
+.message{
+    display: flex;
+    flex-direction: column;
+    gap:4px;
+}
+.message_author{
+    font-weight: bold;
+    margin: 0;
+}
+.message__text{
+    padding-left: 15px;
+    line-height: 1.01em;
+    margin: 0;
+}
 </style>

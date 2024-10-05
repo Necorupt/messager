@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 use App\Models\Chat;
+use App\Models\ChatMessage;
 use App\Models\ChatUser;
 use App\Models\User;
 
@@ -19,8 +20,6 @@ class ChatController extends Controller
 
     public function store(Request $request): JsonResponse
     {
-
-
         $data = $request->only(['name', 'description']);
 
         $chat = Chat::create([
@@ -69,11 +68,20 @@ class ChatController extends Controller
         return response()->json(['message' => 'User added to the chat']);
     }
 
-    public function members($chat_id): JsonResponse{
+    public function members($chat_id): JsonResponse
+    {
         if (!Chat::where('id', $chat_id)) {
             return response()->json(['message' => 'Chat not found'], 404);
         };
 
         return response()->json(ChatUser::where('chat_id', $chat_id)->with('user')->get());
+    }
+
+    public function getMessages(Request $request, $chat_id): JsonResponse {
+        if (!Chat::where('id', $chat_id)) {
+            return response()->json(['message' => 'Chat not found'], 404);
+        };
+
+        return response()->json(ChatMessage::where('chat_id', $chat_id)->with('user')->get());
     }
 }
