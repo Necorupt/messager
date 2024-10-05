@@ -6,6 +6,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\ChatMessage;
+use App\Events\CreateMessage;
 
 class ChatMessageController extends Controller
 {
@@ -16,6 +17,8 @@ class ChatMessageController extends Controller
             'chat_id' => $request->chat_id,
             'user_id' => Auth::user()->id
         ]);
+
+        event(new CreateMessage($chatMessage,$request->chat_id));
 
         return response()->json($chatMessage);
     }

@@ -18,8 +18,8 @@
     </div>
     <div class="messages">
         <div v-for="item in messages" class="message">
-            <h4 class="message_author">User: {{item.user.name}}</h4>
-            <h4 class="message__text">say: {{item.message}}</h4>
+            <h4 class="message_author">User: {{ item.user.name }}</h4>
+            <h4 class="message__text">say: {{ item.message }}</h4>
         </div>
     </div>
 </template>
@@ -36,6 +36,7 @@ export default {
             },
             newMessage: '',
             messages: [],
+            user: null,
             members: null,
         }
     },
@@ -46,6 +47,7 @@ export default {
             this.chat = response.data;
             this.getMembers();
             this.getMessages();
+            this.JoinChannel();
         })
     },
     methods: {
@@ -54,20 +56,26 @@ export default {
                 this.members = response.data;
             });
         },
-        AddMember() {
-
+        JoinChannel() {
+            const echo = window.Echo;
+            ApiService.get('/user').then((response) => {
+                let userID = response.data.id;
+                echo.channel('chat.' + this.chat.id).listen('.CreateMessage' , (data) => {
+                    this.getMessages();
+                })
+            });
         },
-        sendMessage(){
+        sendMessage() {
             let params = {
                 message: this.newMessage,
                 chat_id: this.$route.params.id,
             }
-            ApiService.post('/message',params).then((response) => {
+            ApiService.post('/message', params).then((response) => {
                 this.newMessage = '';
                 this.getMessages();
             });
         },
-        getMessages(){
+        getMessages() {
             ApiService.get('/chat/' + this.$route.params.id + '/messages').then((response) => {
                 this.messages = response.data;
             });
@@ -78,7 +86,7 @@ export default {
 </script>
 
 <style scoped>
-.messages{
+.messages {
     padding-top: 10px;
     display: flex;
     flex-direction: column;
@@ -86,16 +94,19 @@ export default {
     border: 1px solid black;
     padding-left: 10px;
 }
-.message{
+
+.message {
     display: flex;
     flex-direction: column;
-    gap:4px;
+    gap: 4px;
 }
-.message_author{
+
+.message_author {
     font-weight: bold;
     margin: 0;
 }
-.message__text{
+
+.message__text {
     padding-left: 15px;
     line-height: 1.01em;
     margin: 0;
