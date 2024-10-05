@@ -1,18 +1,18 @@
 <template>
-    <h1 @click="test"> Hello world</h1>
+    <router-view></router-view>
 </template>
+
 <script>
+import { RouterView } from 'vue-router';
+
 export default {
-    methods: {
-        test() {
-            alert('You clicked me!');
-        }
-    },
+    comments: {
+        RouterView
+    }
 }
+
 </script>
 
 <style>
-h1 {
-    color: blue;
-}
+
 </style>
